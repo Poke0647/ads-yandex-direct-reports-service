@@ -19,6 +19,4 @@ public class User implements GrantedAuthority {
         return "";
     }
 
-    //check
-
 }
