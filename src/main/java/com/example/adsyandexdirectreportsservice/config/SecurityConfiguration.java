@@ -1,4 +1,4 @@
-package com.example.adsyandexdirectreportsservice.configuration;
+package com.example.adsyandexdirectreportsservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
