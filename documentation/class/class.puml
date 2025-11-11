@@ -1,4 +1,4 @@
-@startuml
+@startuml Class
 
 '!theme plain
 '!pragma layout smetana

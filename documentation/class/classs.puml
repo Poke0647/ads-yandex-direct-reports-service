@@ -1,0 +1,51 @@
+@startuml
+
+    legend top left
+        <b>3. Class</b>
+        ----
+        Version: 0.1
+        Date: 11/11/25
+    '    -- Автор --
+    '    Pavel Isaenko
+        -- Обозначения --
+
+    end legend
+
+    class User {
+        - String name
+        - String login
+        - Role role
+        - String passwordHash
+        - List<ReportTemplate> ReportTemplateList
+        - LocalDateTime createdAt
+        - LocalDateTime changedAt
+
+        + void changePassword(String newPassword)
+        + void updateName(String newName)
+        + void updateLogin(String newLogin)
+        + void updateRole(Role newRole)
+        + void updateChangingDate()
+    }
+
+    class Role {
+        - String name
+        - String description
+    }
+
+    class ReportTemplate {
+        - String name
+        - List<Campaign> campaignsList
+        - Client client
+        - User createdBy
+        - ZonedDateTime createdAt
+        - User changedBy
+        - ZonedDateTime changedAt
+        - boolean isActive
+    }
+
+    class Report {
+        - ReportTemplate reportTemplate
+        - ZonedDateTime createdAt
+    }
+
+@enduml
