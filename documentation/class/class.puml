@@ -1,0 +1,108 @@
+@startuml
+
+'!theme plain
+'!pragma layout smetana
+'left to right direction
+skinparam linetype ortho
+
+
+class User{
+    - String name
+    - String login
+    - Role role
+    - List<ReportTemplate> reportTemplateList
+    - LocalDateTime createdAt
+    - LocalDateTime updatedAt
+    + void changePassword(String newPassword)
+    + void updateName(String newName)
+    + void updateLogin(String newLogin)
+    + void updateRole(Role newRole)
+    + void updateChangeDate()
+}
+
+enum Role {
+    EMPLOYEE
+    ADMIN
+}
+
+class ReportTemplate{
+    - String name
+    - List<Campaign> campaignsList
+    - bool isActive
+    - Client campaignOwnerClient
+    - User createdBy
+    - User changedBy
+    - ZonedDateTime createdAt
+    - ZonedDateTime updatedAt
+    + void startReporting()
+    + void stopReporting()
+}
+
+User --> Role : role
+User "1" o-- "*" ReportTemplate : reportTemplateList
+
+ReportTemplate --> User : createdBy
+ReportTemplate --> User : changedBy
+
+class User implements UserDetails {
+    - Long id
+    - String passwordHash
+
+    + String getUsername()
+    + String getPassword()
+    + Collection<GrantedAuthority> getAuthorities()
+    + boolean isAccountNonExpired()
+    + boolean isAccountNonLocked()
+    + boolean isCredentialsNonExpired()
+    + boolean isEnabled()
+    + void changePassword(String newPassword)
+}
+
+interface UserDetails {
+    + String getUsername()
+    + String getPassword()
+    + Collection<GrantedAuthority> getAuthorities()
+    + boolean isAccountNonExpired()
+    + boolean isAccountNonLocked()
+    + boolean isCredentialsNonExpired()
+    + boolean isEnabled()
+}
+
+interface GrantedAuthority {
+    + String getAuthority()
+}
+
+class SimpleGrantedAuthority implements GrantedAuthority {
+    - String authority
+    + String getAuthority()
+}
+
+class UserRepository {
+    + Optional<User> findByLogin(String login)
+}
+
+class PasswordEncoder {
+        + String encode(String rawPassword)
+        + boolean matches(String rawPassword, String encodedPassword)
+    }
+
+    class UserDetailsService {
+        + UserDetails loadUserByUsername(String username)
+    }
+
+    class UserDetailsServiceImpl {
+        - UserRepository userRepository
+        + UserDetails loadUserByUsername(String username)
+    }
+
+    interface UserDetails {
+        + String getUsername()
+        + String getPassword()
+        + Collection<GrantedAuthority> getAuthorities()
+        + boolean isAccountNonExpired()
+        + boolean isAccountNonLocked()
+        + boolean isCredentialsNonExpired()
+        + boolean isEnabled()
+    }
+
+@enduml

@@ -1,0 +1,105 @@
+@startuml UseCase
+
+left to right direction
+!pragma layout smetana
+!theme plain
+
+legend top left
+    <b>1. UseCase</b>
+    ----
+    Version: 0.5
+    Date: 11/09/25
+'    -- Автор --
+'    Pavel Isaenko
+    -- Обозначения --
+    <<include>> — обязательное действие
+    <<extend>> — необязательное действие
+    <<вн. сист.>> — внешняя система
+end legend
+
+actor Сотрудник
+actor Администратор
+Сотрудник -right-|> Администратор
+actor Клиент
+actor "Yandex Direct API" as YDAPI <<вн. сист.>> #line:SlateGrey
+actor Datalens  <<вн. сист.>> #line:SlateGrey
+
+rectangle "Приложение" as App {
+    usecase "Просматривать \nконфигурации отчетов" as UC1
+    usecase "Создать конфигурацию \nотчета" as UC1_1
+    usecase "Выбрать \nкомпанию-клиента" as UC1_1_1
+    usecase "Выбрать \nрекламные кампании" as UC1_1_2
+'    usecase "Выбрать параметры" as UC1_1_3                         ' Оставлено на будущее
+    usecase "Связать конфигурацию \nотчета с дашбордом" as UC1_1_4
+    usecase "Просматривать \nинформацию о \nконфигурации отчета" as UC1_2
+    usecase "Запускать отчет" as UC1_2_1
+    usecase "Останавливать отчет" as UC1_2_2
+    usecase "Удалять \nконфигурации отчетов" as UC1_3
+
+    usecase "Просматривать список \nклиентов" as UC2
+'    rectangle "s" {                                                ' Оставлено на будущее
+'        usecase "Настроить частоту \nсбора данных" as UC4_1        ' Оставлено на будущее
+'        usecase "Протестировать соединение" as UC4_2               ' Оставлено на будущее
+'    }                                                              ' Оставлено на будущее
+    usecase "Предоставить данные \nдля дашборда" as UC3
+    usecase "Собирать данные \nпо расписанию" as UC4
+    rectangle "Администрирование" {
+        rectangle "Пользователи" {
+                    usecase "Просматривать \nсписок пользователей" as UC5
+                    usecase "Просматривать данные \n пользователей" as UC5_1
+                    usecase "Удалять пользователей" as UC5_2
+                    usecase "Добавлять пользователей" as UC5_3
+                    usecase "Изменять данные \nпользователей" as UC5_4
+        }
+        usecase "Просматривать логи" as UC6
+    }
+    rectangle "Настройки приложения" {
+'        usecase "Изменить частоту \nсбора данных" as UC7           ' Оставлено на будущее
+        usecase "Создать/удалить \nтестовые отчеты" as UC8
+    }
+    rectangle "Авторизация" {
+        usecase "Войти в аккаунт" as UC9
+        usecase "Выйти из аккаунта" as UC10
+    }
+}
+
+Сотрудник ---> UC1
+Сотрудник --> UC2
+
+UC1 ..> UC1_1 : <<extend>>
+UC1 ..> UC1_2 : <<extend>>
+'UC1 ...> UC1_3 : <<extend>>                                        ' Оставлено на будущее
+
+UC1_1 --> UC1_1_1 : <<include>>
+UC1_1 --> UC1_1_2 : <<include>>
+'UC1_1 --> UC1_1_3 : <<include>>                                    ' Оставлено на будущее
+UC1_1 --> UC1_1_4 : <<include>>
+
+UC1_2 ..> UC1_3 : <<extend>>
+
+UC1_2 ..> UC1_2_1 : <<extend>>
+UC1_2 ..> UC1_2_2 : <<extend>>
+
+Сотрудник --> UC9
+Сотрудник --> UC10
+
+Администратор --> UC5
+UC5 ..> UC5_1 : <<extend>>
+'UC5 ...> UC5_2 : <<extend>>                                        ' Оставлено на будущее
+UC5 ..> UC5_3 : <<extend>>
+UC5_1 ..> UC5_2 : <<extend>>
+UC5_1 ..> UC5_4 : <<extend>>
+
+'Администратор --> UC7                                              ' Оставлено на будущее
+Администратор --> UC8
+Администратор --> UC6
+
+UC3 -up-> Datalens : Предоставлять данные \nдля визуализации
+
+UC4 -up-> YDAPI : API-вызов
+
+UC3 -> UC4 : <<include>>
+
+Клиент --> Datalens : Просматривать \nдашборд
+
+@enduml

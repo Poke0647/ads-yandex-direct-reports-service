@@ -1,0 +1,41 @@
+@startuml Activity
+
+!pragma layout smetana
+!theme plain
+
+legend top left
+    <b>2. Activity Diagram
+    ----
+    <b>Создание конфигурации отчета
+    ----
+    Version: 0.2
+    Date: 16/09/25
+end legend
+
+start
+
+partition "Сотрудник" {
+
+    :Инициировать создание конфигурации;
+
+    fork
+        :Выбрать компанию-клиента;
+        :Выбрать рекламные кампании клиента;
+'    fork again
+'        :Выбрать параметры отчета;
+    fork again
+        if (Связать с конфигурацию с дашбордом?) then (Да)
+                :Прикрепить ссылку на дашборд;
+                :Связать;
+        else (Нет)
+                :Пропустить;
+        endif
+    end fork
+
+    :Сохранить конфигурацию;
+
+}
+
+stop
+
+@enduml

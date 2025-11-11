@@ -6,7 +6,6 @@ public class User implements GrantedAuthority {
 
     private String username;
     private String email;
-    private
 
     @Override
     public String getAuthority() {

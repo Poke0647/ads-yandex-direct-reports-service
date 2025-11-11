@@ -1,0 +1,38 @@
+@startuml
+
+!pragma layout smetana
+!theme plain
+
+legend top left
+    <b>2. Activity Diagram
+    ----
+    <b>Вход в аккаунт
+    ----
+    Version: 0.1
+    Date: 18/09/25
+end legend
+
+|Сотрудник|
+start
+:Инициировать вход в систему;
+
+|Система|
+repeat
+:Предоcтавить поля \nдля логина и пароля;
+
+|Сотрудник|
+fork
+:Ввести логин;
+fork again
+:Ввести пароль;
+end fork
+:Подтвердить вход;
+
+|Система|
+backward :Показать сообщение об \nошибке логина/пароля;
+repeat while (Логин существует? \n<b>&&</b>\nПароль соответствует?) is (Нет)
+
+:Редирект на главную страницу;
+
+stop
+@enduml
