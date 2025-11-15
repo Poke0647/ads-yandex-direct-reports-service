@@ -1,51 +1,171 @@
 @startuml
 
+left to right direction
+'!pragma layout smetana
+
+skinparam linetype ortho
+'skinparam linetype polyline
+
     legend top left
-        <b>3. Class</b>
+        <b>3. Class.</b> Имплементационная перспектива
         ----
-        Version: 0.1
-        Date: 11/11/25
+        Version: 0.2
+        Date: 15/11/25
     '    -- Автор --
     '    Pavel Isaenko
         -- Обозначения --
+        — Бизнес-логика и сущности обозначены в разделе "Business"
+        — CrudRepository обозначены для удобства. Они уже определены в Spring JPA
 
     end legend
 
-    class User {
-        - String name
-        - String login
-        - Role role
-        - String passwordHash
-        - List<ReportTemplate> ReportTemplateList
-        - LocalDateTime createdAt
-        - LocalDateTime changedAt
+rectangle "Business" {
+    entity User {
+            - String name
+            - String login
+            - Role role
+            - String passwordHash
+            - List<ReportTemplate> reportTemplatesList
+            - LocalDateTime createdAt
+            - LocalDateTime changedAt
 
-        + void changePassword(String newPassword)
-        + void updateName(String newName)
-        + void updateLogin(String newLogin)
-        + void updateRole(Role newRole)
-        + void updateChangingDate()
+            + void changePassword(String newPassword)
+            + void updateName(String newName)
+            + void updateLogin(String newLogin)
+            + void updateRole(Role newRole)
+            + void updateChangingDate()
     }
 
-    class Role {
+    enum Role {
         - String name
         - String description
     }
 
-    class ReportTemplate {
+    entity ReportTemplate {
         - String name
         - List<Campaign> campaignsList
         - Client client
+        - List<Report> reportsList
         - User createdBy
         - ZonedDateTime createdAt
         - User changedBy
         - ZonedDateTime changedAt
         - boolean isActive
+
+        + void updateName(String newName)
+        + void addCampaign(Campaign newCampaign)
+        + void deleteCampaign(Campaign campaign)
+        + void activate()
+        + void deactivate()
     }
 
-    class Report {
+    entity Report {
         - ReportTemplate reportTemplate
         - ZonedDateTime createdAt
     }
+
+    entity Client {
+        - String name
+        - List<Campaign> campaignsList
+    }
+
+    entity Campaign {
+        - String name
+        - Client client
+        - List<ReportTemplate> reportTemplatesList
+    }
+}
+
+rectangle "Users"{
+    interface CrudRepository<User, Integer> <<external>>
+    interface UserRepository extends CrudRepository<User, Integer>{
+
+    }
+    CrudRepository ..> User
+    UserService --> UserRepository
+
+    class UserService{
+            - UserRepository userRepository
+
+            + List<User> getAllUsers()
+            + User getUserById()
+            + void createNewUser(String name, String login, String role, String password)
+            + void deleteUser(User user)
+    }
+}
+
+rectangle "Campaigns" {
+    interface CrudRepository<Campaign, Integer> <<external>>
+    interface CampaignRepository extends CrudRepository<Campaign, Integer> {
+
+    }
+    CrudRepository ..> Campaign
+    CampaignService --> CampaignRepository
+
+    class CampaignService {
+        - CampaignRepository campaignRepository
+    }
+}
+
+rectangle "Reports" {
+    interface CrudRepository<Report, Integer> <<external>>
+    interface ReportRepository extends CrudRepository<Report, Integer> {
+    }
+    CrudRepository ..> Report
+    ReportService --> ReportRepository
+
+    class ReportService {
+
+    }
+}
+
+rectangle "ReportTemplates" {
+    interface CrudRepository<ReportTemplate, Integer> <<external>>
+    interface ReportTemplateRepository extends CrudRepository<ReportTemplate, Integer>{
+    }
+    CrudRepository ..> ReportTemplate
+    ReportTemplateService --> ReportTemplateRepository
+
+    class ReportTemplateService {
+
+    }
+}
+
+rectangle "Clients" {
+    interface CrudRepository<Client, Integer> <<external>>
+    interface ClientRepository extends CrudRepository<Client, Integer> {
+    }
+    CrudRepository ..> Client
+    ClientService --> ClientRepository
+
+    class ClientService {
+    }
+}
+
+class MainPageController {
+    - UserService
+
+    + addUserToModel()
+    + showPage()
+}
+
+class UsersPageController {
+    - UserService userService
+    + addUserToModel(Model)
+    + showPage()
+}
+
+User "*" -- "1" Role : role
+ReportTemplate "*" --> "1" User : createdBy
+ReportTemplate "*" --> "1" User : changedBy
+ReportTemplate "*" -- "*" Campaign
+ReportTemplate "*" -- "1" Client : client
+ReportTemplate "1" -- "*" Report : reportTemplate
+Client "1" -- "*" Campaign : client
+
+
+
+UsersPageController --> UserService
+MainPageController --> UserService
 
 @enduml
