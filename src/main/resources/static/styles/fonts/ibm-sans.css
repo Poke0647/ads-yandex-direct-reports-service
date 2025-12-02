@@ -1,0 +1,23 @@
+/*
+ * Pavel Isaenko Copyright (c) 2025.
+ */
+
+@font-face {
+    font-family: "ibm-sans-regular";
+    src: url(/fonts/ibm_sans/IBMPlexSans-Regular.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "ibm-sans-medium";
+    src: url(/fonts/ibm_sans/IBMPlexSans-Medium.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "ibm-sans-bold";
+    src: url(/fonts/ibm_sans/IBMPlexSans-Bold.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "ibm-sans-sbold";
+    src: url(/fonts/ibm_sans/IBMPlexSans-SemiBold.ttf) format("truetype");
+}

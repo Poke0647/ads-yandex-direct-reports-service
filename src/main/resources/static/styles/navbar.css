@@ -1,0 +1,41 @@
+/*
+ * Pavel Isaenko Copyright (c) 2025.
+ */
+
+.navbar {
+    height: 3.2rem;
+
+    background-color: rgba(256, 256, 256, 0.6);
+    backdrop-filter: blur(1.5rem);
+    -webkit-backdrop-filter: blur(1.5rem);
+
+    border-style: solid;
+    border-color: #ebebeb;
+    border-width: 0 0 1px 0;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    padding-left: 2.4rem;
+    padding-right: 2.4rem;
+
+    display: flex;
+    align-items: center;
+}
+
+.navbar * {
+    gap: 3.2rem;
+    --webkit-text-box: trim-both ex alphabetic;
+    text-box: trim-both ex alphabetic;
+}
+
+.contextual-menu {
+    display: flex;
+    margin-right: auto;
+}
+
+.main-menu {
+    display: flex;
+    margin-left: auto;
+}

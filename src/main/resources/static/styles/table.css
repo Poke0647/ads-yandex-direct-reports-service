@@ -1,0 +1,138 @@
+/*
+ * Pavel Isaenko Copyright (c) 2025.
+ */
+
+.table-section {
+    padding: 0;
+    transform: scaleY(-1);
+}
+
+.table-container {
+    max-width: 100%;
+    overflow-x: scroll;
+    scrollbar-gutter: stable both-edges;
+
+    scrollbar-color: #d8d8d8 #fff;
+
+    scroll-timeline-name: --scroll;
+    scroll-timeline-axis: inline;
+}
+
+table {
+    table-layout: fixed;
+    /*gap: 2rem;*/
+    white-space: pre;
+    border-collapse: collapse;
+    transform: scaleY(-1);
+
+}
+
+thead {
+    border-top: solid 1px #ebebeb;
+    border-bottom: solid 1px #ebebeb;
+}
+th {
+    font-weight: normal;
+    font-family: ibm-mono-medium, ui-monospace medium;
+    height: 3.2rem;
+    align-content: center;
+    text-align: start;
+    padding-right: 1.8rem;
+}
+td{
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+    padding-right: 1.8rem;
+}
+
+tbody tr{
+    margin-bottom: 1.8rem;
+}
+tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+tbody tr:nth-child(even) {
+    background-color: #F7F7F7;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+
+    position: sticky;
+    left: 0;
+
+    z-index: 10;
+    outline: 1px solid #ebebeb;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    background-color: #fff;
+
+
+}
+
+th:nth-child(1) {
+    padding-left: 2.4rem;
+
+    animation-name: th-inl-widthAnimation;
+    animation-fill-mode: forwards;
+    animation-timeline: --scroll;
+    animation-range: 0rem 12rem;
+}
+
+td:nth-child(1) {
+    background-color: inherit;
+    padding-right: 0;
+}
+
+th:nth-child(2) {
+    padding-left: 0.6rem;
+}
+
+td:nth-child(2) {
+    padding-left: 0.6rem;
+}
+
+.inl {
+    overflow-x: hidden;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+
+    height: 1.2rem;
+    align-content: center;
+
+    animation-name: td-inl-widthAnimation;
+    animation-fill-mode: forwards;
+    animation-timeline: --scroll;
+    animation-range: 0rem 16rem;
+
+    padding-right: 0.6rem;
+    padding-left: 2.4rem;
+
+    /*animation: widthAnimation 1s linear both;*/
+    /*animation-timeline: --scroll;*/
+    /*animation-range: 0 20rem;*/
+}
+
+.main-col {
+}
+
+@keyframes th-inl-widthAnimation {
+    to {
+        padding-left: 0.5rem;
+        padding-right: 0.3rem;
+
+    }
+}
+
+@keyframes td-inl-widthAnimation {
+    to {
+        /*background-color: #ffb9ff;*/
+        padding-right: 0.3rem;
+        padding-left: 0.5rem;
+        font-size: 0.7rem;
+        /*width: 15rem;*/
+    }
+}

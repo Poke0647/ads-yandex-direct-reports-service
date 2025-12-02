@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html
+        lang="ru"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/styles/login_form/index.css}">
+    <link rel="shortcut icon" href="/img/favicons/favicon.svg" type="image/svg+xml">
+    <link rel="shortcut icon" href="/img/favicons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/img/favicons/favicon.svg">
+    <title>Вход</title>
+</head>
+<body>
+<div class="header">
+    <div class="logo-box">
+        <img class="logo" src="/img/from_kp/logo-white.svg" alt="KEYPOINT//ID">
+    </div>
+
+</div>
+<form th:action="@{/login}" method="post">
+    <div class="input-area">
+        <div class="login-title">Войдите в систему</div>
+        <div class="login-error" th:if="${param.error}">
+            Wrong username or password
+        </div>
+        <div class="input-field">
+            <input id="username" name="username" class="login-input" type="text" placeholder=" ">
+            <label for="username"></label>
+        </div>
+        <div class="input-field">
+            <input id="password" name="password" class="password-input" type="password" placeholder=" ">
+            <label for="password"></label>
+        </div>
+        <div class="result-field">
+            <input class="modal-check" id="modal" type="checkbox">
+            <div class="modal">
+                <label for="modal" class="modal-close-back"></label>
+                <div class="modal-block">
+                    <!-- <label for="modal" class="modal-close">&times;</label> -->
+                    <p>Если вы забыли какие-либо данные, необходимые для входа, обратитесь в тех. поддержку по номеру ... или на почту ...</p>
+                </div>
+            </div>
+            <label for="modal" class="modal-button">Что-то забыли?</label>
+            <input type="submit" class="submit-button" value="login">
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

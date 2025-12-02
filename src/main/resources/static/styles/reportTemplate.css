@@ -1,0 +1,68 @@
+/*
+ * Pavel Isaenko Copyright (c) 2025.
+ */
+.head-section {
+    display: flex;
+    align-items: center;
+    height: 2rem;
+}
+
+.head-section * {
+    align-items: stretch;
+}
+
+.entity-name {
+    display: flex;
+    gap: 1rem;
+    font-size: 1.6rem;
+    height: 100%;
+    width: 80%;
+}
+
+.entity-name * {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: 100%;
+    align-content: center;
+}
+
+.entity-name .name {
+    overflow: hidden;
+    font-family: ibm-mono-medium, ui-monospace;
+    margin-right: auto;
+}
+
+.number-of-lines-counter {
+    white-space: nowrap;
+    width: 20%;
+    min-width: 8.4rem;
+    text-align: end;
+    margin-left: auto;
+}
+
+.info-sign {
+    height: 0.65rem;
+    display: inline;
+    align-content: center;
+}
+
+.service-info-section {
+    padding-top: 0.3rem;
+    padding-bottom: 0.65rem;
+    overflow-x: scroll;
+    max-width: 100%;
+}
+
+.service-info {
+    display: flex;
+    white-space: nowrap;
+}
+
+.service-info div {
+    padding-right: 4rem;
+}
+
+.service-info a {
+    text-decoration: none;
+}
+
