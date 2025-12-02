@@ -1,22 +1,21 @@
 @startuml
 
 left to right direction
-'!pragma layout smetana
+!pragma layout smetana
 
-skinparam linetype ortho
+'skinparam linetype ortho
 'skinparam linetype polyline
 
     legend top left
         <b>3. Class.</b> Имплементационная перспектива
         ----
-        Version: 0.2
-        Date: 15/11/25
+        Version: 0.2.2
+        Date: 02/12/25
     '    -- Автор --
     '    Pavel Isaenko
         -- Обозначения --
         — Бизнес-логика и сущности обозначены в разделе "Business"
-        — CrudRepository обозначены для удобства. Они уже определены в Spring JPA
-
+        — JpaRepository обозначены для удобства. Они уже определены в Spring JPA
     end legend
 
 rectangle "Business" {
@@ -25,15 +24,15 @@ rectangle "Business" {
             - String login
             - Role role
             - String passwordHash
-            - List<ReportTemplate> reportTemplatesList
             - LocalDateTime createdAt
             - LocalDateTime changedAt
 
-            + void changePassword(String newPassword)
-            + void updateName(String newName)
-            + void updateLogin(String newLogin)
-            + void updateRole(Role newRole)
             + void updateChangingDate()
+    }
+
+    record Goal {
+        - String goalName
+        - Integer goalValue
     }
 
     enum Role {
@@ -41,16 +40,23 @@ rectangle "Business" {
         - String description
     }
 
+    class CampaignToReportTemplate {
+        - Campaign campaign
+        - ReportTemplate reportTemplate
+    }
+
     entity ReportTemplate {
         - String name
-        - List<Campaign> campaignsList
+        - Set<CampaignToReportTemplate> reportTemplatesSet
         - Client client
         - List<Report> reportsList
+        - int frequency
         - User createdBy
         - ZonedDateTime createdAt
         - User changedBy
         - ZonedDateTime changedAt
         - boolean isActive
+        - String dashboardURL
 
         + void updateName(String newName)
         + void addCampaign(Campaign newCampaign)
@@ -58,31 +64,45 @@ rectangle "Business" {
         + void activate()
         + void deactivate()
     }
-
+    note right of ReportTemplate::frequency
+        Нужна Quartz-реализация
+    end note
     entity Report {
         - ReportTemplate reportTemplate
+        - int impressions
+        - int clicks
+        - int ctr
+        - int avgClickPrice
+        - int cancels
+        - int conversionPrice
+        - int conversionCoef
+        - List<Goal> goals
         - ZonedDateTime createdAt
     }
 
     entity Client {
         - String name
+        - String yaDirectLogin
         - List<Campaign> campaignsList
     }
 
     entity Campaign {
         - String name
         - Client client
-        - List<ReportTemplate> reportTemplatesList
+        - String deviceType
+        - String platform
+        - Set<CampaignToReportTemplate> campaignsSet
     }
 }
 
 rectangle "Users"{
-    interface CrudRepository<User, Integer> <<external>>
-    interface UserRepository extends CrudRepository<User, Integer>{
-
+    interface JpaRepository<User, Integer> <<external>>
+    interface UserRepository extends JpaRepository<User, Integer>{
     }
-    CrudRepository ..> User
+
+    JpaRepository ..> User
     UserService --> UserRepository
+    UserService ..> User
 
     class UserService{
             - UserRepository userRepository
@@ -95,11 +115,11 @@ rectangle "Users"{
 }
 
 rectangle "Campaigns" {
-    interface CrudRepository<Campaign, Integer> <<external>>
-    interface CampaignRepository extends CrudRepository<Campaign, Integer> {
+    interface JpaRepository<Campaign, Integer> <<external>>
+    interface CampaignRepository extends JpaRepository<Campaign, Integer> {
 
     }
-    CrudRepository ..> Campaign
+    JpaRepository ..> Campaign
     CampaignService --> CampaignRepository
 
     class CampaignService {
@@ -108,10 +128,10 @@ rectangle "Campaigns" {
 }
 
 rectangle "Reports" {
-    interface CrudRepository<Report, Integer> <<external>>
-    interface ReportRepository extends CrudRepository<Report, Integer> {
+    interface JpaRepository<Report, Integer> <<external>>
+    interface ReportRepository extends JpaRepository<Report, Integer> {
     }
-    CrudRepository ..> Report
+    JpaRepository ..> Report
     ReportService --> ReportRepository
 
     class ReportService {
@@ -120,10 +140,10 @@ rectangle "Reports" {
 }
 
 rectangle "ReportTemplates" {
-    interface CrudRepository<ReportTemplate, Integer> <<external>>
-    interface ReportTemplateRepository extends CrudRepository<ReportTemplate, Integer>{
+    interface JpaRepository<ReportTemplate, Integer> <<external>>
+    interface ReportTemplateRepository extends JpaRepository<ReportTemplate, Integer>{
     }
-    CrudRepository ..> ReportTemplate
+    JpaRepository ..> ReportTemplate
     ReportTemplateService --> ReportTemplateRepository
 
     class ReportTemplateService {
@@ -132,13 +152,24 @@ rectangle "ReportTemplates" {
 }
 
 rectangle "Clients" {
-    interface CrudRepository<Client, Integer> <<external>>
-    interface ClientRepository extends CrudRepository<Client, Integer> {
+    interface JpaRepository<Client, Integer> <<external>>
+    interface ClientRepository extends JpaRepository<Client, Integer> {
     }
-    CrudRepository ..> Client
+    JpaRepository ..> Client
     ClientService --> ClientRepository
 
     class ClientService {
+    }
+}
+
+rectangle "CampaignsToReportTemplates" {
+    interface JpaRepository<CampaignsToReportTemplate, Integer> <<external>>
+    interface CampaignToReportTemplateRepository implements JpaRepository<CampaignToReportTemplate, Integer> {
+    }
+    JpaRepository ..> CampaignToReportTemplate
+    CampaignToReportTemplateService --> CampaignToReportTemplateRepository
+
+    class CampaignToReportTemplateService {
     }
 }
 
@@ -155,14 +186,16 @@ class UsersPageController {
     + showPage()
 }
 
-User "*" -- "1" Role : role
+User "*" --> "1" Role : role
 ReportTemplate "*" --> "1" User : createdBy
 ReportTemplate "*" --> "1" User : changedBy
-ReportTemplate "*" -- "*" Campaign
+'ReportTemplate "*" -- "*" Campaign
+ReportTemplate "1" -- "*" CampaignToReportTemplate : reportTemplatesSet
+CampaignToReportTemplate "*" -- "1" Campaign : campaignsSet
 ReportTemplate "*" -- "1" Client : client
 ReportTemplate "1" -- "*" Report : reportTemplate
 Client "1" -- "*" Campaign : client
-
+Report "1" -- "*" Goal : goals
 
 
 UsersPageController --> UserService

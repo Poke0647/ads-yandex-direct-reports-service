@@ -3,12 +3,13 @@
 left to right direction
 !pragma layout smetana
 !theme plain
+'skinparam linetype polyline
 
 legend top left
     <b>1. UseCase</b>
     ----
-    Version: 0.5
-    Date: 11/09/25
+    Version: 0.6
+    Date: 19/11/25
 '    -- Автор --
 '    Pavel Isaenko
     -- Обозначения --
@@ -34,7 +35,8 @@ rectangle "Приложение" as App {
     usecase "Просматривать \nинформацию о \nконфигурации отчета" as UC1_2
     usecase "Запускать отчет" as UC1_2_1
     usecase "Останавливать отчет" as UC1_2_2
-    usecase "Удалять \nконфигурации отчетов" as UC1_3
+    usecase "Удалять \nконфигурации отчетов" as UC1_2_3
+    usecase "Просматривать \nинформацию о клиенте" as UC1_3
 
     usecase "Просматривать список \nклиентов" as UC2
 '    rectangle "s" {                                                ' Оставлено на будущее
@@ -68,14 +70,14 @@ rectangle "Приложение" as App {
 
 UC1 ..> UC1_1 : <<extend>>
 UC1 ..> UC1_2 : <<extend>>
-'UC1 ...> UC1_3 : <<extend>>                                        ' Оставлено на будущее
+UC1 ...> UC1_3 : <<extend>>
 
 UC1_1 --> UC1_1_1 : <<include>>
 UC1_1 --> UC1_1_2 : <<include>>
 'UC1_1 --> UC1_1_3 : <<include>>                                    ' Оставлено на будущее
 UC1_1 --> UC1_1_4 : <<include>>
 
-UC1_2 ..> UC1_3 : <<extend>>
+UC1_2 ..> UC1_2_3 : <<extend>>
 
 UC1_2 ..> UC1_2_1 : <<extend>>
 UC1_2 ..> UC1_2_2 : <<extend>>
