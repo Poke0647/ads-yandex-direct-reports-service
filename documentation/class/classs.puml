@@ -1,10 +1,10 @@
 @startuml
 
 left to right direction
-!pragma layout smetana
 
+'!pragma layout smetana
 'skinparam linetype ortho
-'skinparam linetype polyline
+skinparam linetype polyline
 
     legend top left
         <b>3. Class.</b> Имплементационная перспектива
@@ -41,6 +41,7 @@ rectangle "Business" {
     }
 
     class CampaignToReportTemplate {
+        - Long id
         - Campaign campaign
         - ReportTemplate reportTemplate
     }
@@ -105,12 +106,13 @@ rectangle "Users"{
     UserService ..> User
 
     class UserService{
-            - UserRepository userRepository
+        - UserRepository userRepository
 
-            + List<User> getAllUsers()
-            + User getUserById()
-            + void createNewUser(String name, String login, String role, String password)
-            + void deleteUser(User user)
+        + List<User> getAllUsers()
+        + User getUserById()
+        + void createUser(String name, String login, String role, String password)
+        + void updateUser(String newName, String login, String role, String password)
+        + void deleteUser(User user)
     }
 }
 
@@ -124,6 +126,8 @@ rectangle "Campaigns" {
 
     class CampaignService {
         - CampaignRepository campaignRepository
+        + getAllCampaigns()
+        + getCampaignsByClient()
     }
 }
 
@@ -147,7 +151,12 @@ rectangle "ReportTemplates" {
     ReportTemplateService --> ReportTemplateRepository
 
     class ReportTemplateService {
-
+        - ReportTemplateRepository reportTemplateRepository
+        + void createReportTemplate(String name, Client client, List<Campaign> campaignsList)
+        + void deleteReportTemplate(ReportTemplate reportTemplate)
+        + List<ReportTemplate> getAllReportTemplates()
+        + ReportTemplate getReportTemplate(ReportTemplate reportTemplate)
+        + void startReportTemplate(ReportTemplate reportTemplate)
     }
 }
 
@@ -165,6 +174,9 @@ rectangle "Clients" {
 rectangle "CampaignsToReportTemplates" {
     interface JpaRepository<CampaignsToReportTemplate, Integer> <<external>>
     interface CampaignToReportTemplateRepository implements JpaRepository<CampaignToReportTemplate, Integer> {
+        findByReportTemplate(ReportTemplate reportTemplate)
+        findByCampaign(Campaign campaign)
+        deleteByReportTemplate(ReportTemplate reportTemplate)
     }
     JpaRepository ..> CampaignToReportTemplate
     CampaignToReportTemplateService --> CampaignToReportTemplateRepository
@@ -172,18 +184,73 @@ rectangle "CampaignsToReportTemplates" {
     class CampaignToReportTemplateService {
     }
 }
+'
+'class MainPageController {
+'    - UserService
+'
+'    + addUserToModel()
+'    + showPage()
+'}
 
-class MainPageController {
-    - UserService
 
-    + addUserToModel()
-    + showPage()
+
+class ReportTemplatesController {
+    - ReportTemplateService
+    - UserService userService
+    + String showPage()
 }
 
-class UsersPageController {
+class ReportTemplateController {
+    - ReportTemplateService reportTemplateService
     - UserService userService
-    + addUserToModel(Model)
-    + showPage()
+    + String showPage()
+    + void deleteReportTemplateProcess()
+    + void startReportTemplate()
+    + void stopReportTemplate()
+}
+
+class ReportTemplateCreationPageController {
+    - UserService userService
+    - ReportTemplateService reportTemplateService
+    - CampaignService campaignService
+    - ClientService clientService
+    + void createReportTemplateProcess()
+}
+
+class ClientsController {
+    - UserService userService
+    - ClientService clientService
+    + String showPage()
+}
+
+class ClientController {
+    - UserService userService
+    - ClientService clientService
+    + String showPage()
+}
+
+class UserRegistrationPageController {
+    - UserService userService
+    + String showPage()
+    + registrationProcess()
+}
+
+class UserController {
+    - UserService userService
+    + String showPage()
+    + void deleteUserProcess()
+}
+
+class UserUpdatePageController {
+    - UserService userService
+    + String showPage()
+    + void updateUserProcess()
+}
+
+class UsersController {
+    - UserService userService
+    + void addUserToModel(Model)
+    + String showPage()
 }
 
 User "*" --> "1" Role : role
@@ -198,7 +265,38 @@ Client "1" -- "*" Campaign : client
 Report "1" -- "*" Goal : goals
 
 
-UsersPageController --> UserService
-MainPageController --> UserService
+UsersController --> UserService
+
+UserController --> UserService
+
+ClientsController --> UserService
+ClientsController --> ClientService
+
+ClientController --> UserService
+ClientController --> ClientService
+
+UserRegistrationPageController --> UserService
+
+UserUpdatePageController --> UserService
+
+ReportTemplatesController --> ReportTemplateService
+ReportTemplatesController --> UserService
+
+ReportTemplateController --> ReportTemplateService
+ReportTemplateController --> UserService
+
+ReportTemplateCreationPageController --> UserService
+ReportTemplateCreationPageController --> ReportTemplateService
+ReportTemplateCreationPageController --> CampaignService
+ReportTemplateCreationPageController --> ClientService
+
+'MainPageController --> UserService
 
 @enduml
+
+
+
+
+
+
+
