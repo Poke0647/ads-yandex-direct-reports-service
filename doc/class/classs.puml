@@ -3,8 +3,8 @@
 left to right direction
 
 '!pragma layout smetana
-'skinparam linetype ortho
-skinparam linetype polyline
+skinparam linetype ortho
+'skinparam linetype polyline
 
     legend top left
         <b>3. Class.</b> Имплементационная перспектива
@@ -157,6 +157,7 @@ rectangle "ReportTemplates" {
         + List<ReportTemplate> getAllReportTemplates()
         + ReportTemplate getReportTemplate(ReportTemplate reportTemplate)
         + void startReportTemplate(ReportTemplate reportTemplate)
+        + void stopReportTemplate(ReportTemplate reportTemplate)
     }
 }
 
