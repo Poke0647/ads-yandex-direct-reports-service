@@ -12,6 +12,8 @@
     overflow-x: scroll;
     scrollbar-gutter: stable both-edges;
 
+    padding: 0;
+
     scrollbar-color: #d8d8d8 #fff;
 
     scroll-timeline-name: --scroll;
@@ -64,9 +66,10 @@ td:nth-child(1) {
     z-index: 10;
     outline: 1px solid #ebebeb;
 
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    /*overflow: hidden;*/
+
+    /*white-space: nowrap;*/
+    /*text-overflow: ellipsis;*/
 
     background-color: #fff;
 
@@ -96,9 +99,9 @@ td:nth-child(2) {
 }
 
 .inl {
-    overflow-x: hidden;
-    text-wrap: nowrap;
-    text-overflow: ellipsis;
+    /*overflow-x: hidden;*/
+    /*text-wrap: nowrap;*/
+    /*text-overflow: ellipsis;*/
 
     height: 1.2rem;
     align-content: center;
